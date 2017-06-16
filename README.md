@@ -1,4 +1,5 @@
 # Vue-MQ
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![license](https://img.shields.io/badge/license-CC0-red.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
 Note: Draft, not quite production ready.
 
 Vue.js 2.0+ plugin for media queries.
