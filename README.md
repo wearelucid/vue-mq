@@ -67,3 +67,4 @@ Vue.component({
 IE9+ ([See clientWidth](https://tylercipriani.com/blog/2014/07/12/crossbrowser-javascript-scrollbar-detection/))
 
 ## License
+[CC0](LICENSE)
