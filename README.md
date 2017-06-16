@@ -16,6 +16,7 @@ Vue.js 2.0+ plugin for media queries.
 ```javascript
 import { MediaQueries } from 'plugins/mediaqueries'
 
+// Define your breakpoints or import them from elsewhere
 const breakpoints = {
   small: 400,
   medium: 768,
@@ -23,9 +24,7 @@ const breakpoints = {
   huge: 1400
 }
 
-Vue.use(MediaQueries, {
-  breakpoints
-})
+Vue.use(MediaQueries, { breakpoints })
 
 ```
 
@@ -35,20 +34,34 @@ And then use it in your components
 Vue.component({
   // ...
   render (h) {
-    {this.$query({ from: 'medium' })
-      ? 'Small Content'
-      : 'Large Content'}
+    return (
+      <div>
+      {this.$query({ from: 'medium' })
+        ? 'Small Content'
+        : 'Large Content'}
+      </div>
+    )
   }
 })
 ```
-Or display the currentBreakpoint
+
+Use cases:
+```javascript
+this.$query({ from: 'medium' })
+this.$query({ from: 'small', to: 'large' })
+this.$query({ to: 'large' })
+```
+
+Or, as another example, display the currentBreakpoint
 ```javascript
 // JSX Example
 Vue.component({
   name: 'DevStats'
   // ...
   render (h) {
-    Current Breakpoint: {this.$mq.currentBreakpoint.name} @ {this.$mq.currentBreakpoint.value}px
+    return (
+      <span> Current Breakpoint: {this.$mq.currentBreakpoint.name} @ {this.$mq.currentBreakpoint.value}px </span>
+    )
   }
 })
 ```
