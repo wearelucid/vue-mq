@@ -13,8 +13,7 @@ Vue.js 2.0+ plugin for media queries.
 
 ## Integration
 
-```
-
+```javascript
 import { MediaQueries } from 'plugins/mediaqueries'
 
 const breakpoints = {
@@ -31,7 +30,7 @@ Vue.use(MediaQueries, {
 ```
 
 And then use it in your components
-```
+```javascript
 // JSX Example
 Vue.component({
   // ...
@@ -43,7 +42,7 @@ Vue.component({
 })
 ```
 Or display the currentBreakpoint
-```
+```javascript
 // JSX Example
 Vue.component({
   name: 'DevStats'
