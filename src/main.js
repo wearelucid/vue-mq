@@ -27,7 +27,7 @@ export const MediaQueries = {
       listening: false,
       width: false,
       breakpoints: options.breakpoints,
-      currentBreakpoint: {
+      current: {
         value: 0,
         name: 'zero'
       }
@@ -47,15 +47,15 @@ export const MediaQueries = {
 
     const updateBreakpoint = function () {
       const { width } = getViewportSize()
-      const currentBreakpoint = { ...localStore.currentBreakpoint }
+      const current = { ...localStore.current }
       // Go through breakpoints and compare with window width
       Object.keys(localStore.breakpoints).forEach((key) => {
         if (width > localStore.breakpoints[key]) {
-          currentBreakpoint.name = key
-          currentBreakpoint.value = localStore.breakpoints[key]
+          current.name = key
+          current.value = localStore.breakpoints[key]
         }
       })
-      localStore.currentBreakpoint = currentBreakpoint
+      localStore.current = current
     }
 
     Vue.mixin({
@@ -87,17 +87,17 @@ export const MediaQueries = {
 
             // The breakpoint needs to be smaller than the "to" (exclusive)
             // but larger or the same as "from" (inclusive)
-            return breakpointFrom <= this.$mq.currentBreakpoint.value && this.$mq.currentBreakpoint.value < breakpointTo
+            return breakpointFrom <= this.$mq.current.value && this.$mq.current.value < breakpointTo
           }
 
           if (options.to !== undefined) {
             // Breakpoint needs to smaller than the "to" (exclusive)
-            return this.$mq.currentBreakpoint.value < getBreakpointValue(options.to)
+            return this.$mq.current.value < getBreakpointValue(options.to)
           }
 
           if (options.from !== undefined) {
             // Breakpoint needs larger or the same as "from" (inclusive)
-            return this.$mq.currentBreakpoint.value >= getBreakpointValue(options.from)
+            return this.$mq.current.value >= getBreakpointValue(options.from)
           }
         }
       }
