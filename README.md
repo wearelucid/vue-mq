@@ -1,5 +1,5 @@
 # Vue-MQ
-[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![license](https://img.shields.io/badge/license-CC0-red.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![license](https://img.shields.io/badge/license-MIT-red.svg)](https://choosealicense.com/licenses/mit/)
 
 
 Note: Draft, not quite production ready.
@@ -67,4 +67,4 @@ Vue.component({
 IE9+ ([See clientWidth](https://tylercipriani.com/blog/2014/07/12/crossbrowser-javascript-scrollbar-detection/))
 
 ## License
-[CC0](LICENSE)
+[MIT](LICENSE)
