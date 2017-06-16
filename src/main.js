@@ -1,20 +1,11 @@
 import debounce from 'lodash.debounce'
 
 /**
- * MediaQueries v1.0.0
- * License: WTFPL
- *
  * This is a media queries plugin for vue that adds a `$query` method to every
  * component and exposes media query information through the `$mq` property.
  *
  * It assumes an option `breakpoints` with breakpoint names as keys
  * and the width in pixels as number.
- *
- * TODO: Consider removing `throw` in production
- * TODO: Validate reactive property. Is this correctly implemented? (_mq, __mq__, $mq)
- * TODO: Documentation: Example
- * TODO: Option to sync with CSS (e.g by reading breakpoints from JSON String, which we set <title>'s font-size property)
- * TODO: Implement alternative way to pass in breakpoints
  */
 
 export const MediaQueries = {
