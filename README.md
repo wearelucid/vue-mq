@@ -60,7 +60,7 @@ Vue.component({
   // ...
   render (h) {
     return (
-      <span> Current Breakpoint: {this.$mq.currentBreakpoint.name} @ {this.$mq.currentBreakpoint.value}px </span>
+      <span> Current Breakpoint: {this.$mq.current.name} @ {this.$mq.current.value}px </span>
     )
   }
 })
