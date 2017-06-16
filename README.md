@@ -1,4 +1,4 @@
-# Vue-MQ
+# vue-mq
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![license](https://img.shields.io/badge/license-MIT-red.svg)](https://choosealicense.com/licenses/mit/)
 
 
