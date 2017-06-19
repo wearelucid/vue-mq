@@ -60,7 +60,7 @@ export const MediaQueries = {
 
     Vue.mixin({
       beforeCreate () {
-        let root = this.$parent
+        const root = this.$parent
 
         if (root) {
           // TODO: Verify if this line is needed
