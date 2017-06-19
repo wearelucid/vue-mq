@@ -74,6 +74,7 @@ Vue.component({
 - [ ] Implement alternative way to pass in breakpoints
 - [ ] Tests
 - [ ] Npm Compat
+- [ ] Consider using [matchMedia](https://developer.mozilla.org/en/docs/Web/API/Window/matchMedia) which is [polyfillable](https://github.com/paulirish/matchMedia.js)
 
 ## Browser Support
 IE9+ ([See clientWidth](https://tylercipriani.com/blog/2014/07/12/crossbrowser-javascript-scrollbar-detection/))

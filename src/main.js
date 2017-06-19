@@ -24,7 +24,7 @@ export const MediaQueries = {
     })
 
     const localStore = {
-      listening: false,
+      listeningForResize: false,
       width: false,
       breakpoints: options.breakpoints,
       current: {
@@ -60,17 +60,26 @@ export const MediaQueries = {
 
     Vue.mixin({
       beforeCreate () {
-        this._mq = localStore
-        Vue.util.defineReactive(this, '__mq__', this._mq)
+        let root = this.$parent
+
+        if (root) {
+          // TODO: Verify if this line is needed
+          Vue.util.defineReactive(this, '__mq__', root._mq)
+        } else {
+          this._mq = localStore
+          Vue.util.defineReactive(this, '__mq__', this._mq)
+        }
       },
       mounted () {
-        if (!this.$mq.listening) {
-          this.$mq.listening = true
+        if (!this.$mq.listeningForResize) {
+          this.$mq.listeningForResize = true
           window.addEventListener('resize', resizeListener)
-          resizeListener()
+          updateBreakpoint()
         }
       },
       methods: {
+        // TODO: evaluate if we can use matchMedia API
+        // https://developer.mozilla.org/en/docs/Web/API/Window/matchMedia
         $query: function (options) {
           if (options.from === undefined && options.to === undefined) {
             throw new Error('No values for "to" or "from" received')
