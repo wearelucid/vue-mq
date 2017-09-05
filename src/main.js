@@ -1,7 +1,7 @@
 import debounce from 'lodash.debounce'
 
 /**
- * MediaQueries v1.0.4
+ * MediaQueries v1.0.5
  * License: WTFPL
  *
  * This is a media queries plugin for vue that adds a `$query` method to every

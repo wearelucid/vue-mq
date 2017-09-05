@@ -16,6 +16,9 @@ var _lodash2 = _interopRequireDefault(_lodash);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
+ * MediaQueries v1.0.5
+ * License: WTFPL
+ *
  * This is a media queries plugin for vue that adds a `$query` method to every
  * component and exposes media query information through the `$mq` property.
  *
@@ -33,7 +36,7 @@ var MediaQueries = exports.MediaQueries = {
 
     if (_typeof(options.breakpoints) !== 'object') {
       // TODO lodash.isobject
-      throw new Error('No valid breakpoints object received');
+      console.error('No valid breakpoints object received');
     }
 
     Object.defineProperty(Vue.prototype, '$mq', {
@@ -43,10 +46,10 @@ var MediaQueries = exports.MediaQueries = {
     });
 
     var localStore = {
-      listeningForResize: false,
+      listening: false,
       width: false,
       breakpoints: options.breakpoints,
-      current: {
+      currentBreakpoint: {
         value: 0,
         name: 'zero'
       }
@@ -54,57 +57,72 @@ var MediaQueries = exports.MediaQueries = {
 
     var resizeListener = (0, _lodash2.default)(function () {
       updateBreakpoint();
-    }, options.debounceDelay);
-
+    }, options.debounceDelay, { leading: true, trailing: true });
     var getBreakpointValue = function getBreakpointValue(breakpoint) {
       if (localStore.breakpoints[breakpoint] === undefined) {
-        throw new Error('Breakpoint not found: "' + breakpoint + '"');
+        console.error('Breakpoint not found: "' + breakpoint + '"');
       }
 
       return parseInt(localStore.breakpoints[breakpoint], 10);
     };
 
-    var updateBreakpoint = function updateBreakpoint() {
-      var _getViewportSize = getViewportSize(),
-          width = _getViewportSize.width;
+    /**
+     * Function returns different function depending
+     * on if matchMedia is supported or not.
+     */
+    var updateBreakpoint = function () {
+      // Check if matchMedia is supported
+      var supportsMatchMedia = window.matchMedia || window.msMatchMedia;
 
-      var current = _extends({}, localStore.current);
-      // Go through breakpoints and compare with window width
-      Object.keys(localStore.breakpoints).forEach(function (key) {
-        if (width > localStore.breakpoints[key]) {
-          current.name = key;
-          current.value = localStore.breakpoints[key];
-        }
-      });
-      localStore.current = current;
-    };
+      if (supportsMatchMedia) {
+        // Modern Browers
+        return function () {
+          var currentBreakpoint = _extends({}, localStore.currentBreakpoint);
+          // Go through breakpoints and compare with window width
+          Object.keys(localStore.breakpoints).forEach(function (key) {
+            if (window.matchMedia('(min-width: ' + localStore.breakpoints[key] + 'px)').matches) {
+              currentBreakpoint.name = key;
+              currentBreakpoint.value = localStore.breakpoints[key];
+            }
+          });
+          localStore.currentBreakpoint = currentBreakpoint;
+        };
+      } else {
+        // support e.g. IE9/IE8
+        return function () {
+          var _getViewportSize = getViewportSize(),
+              width = _getViewportSize.width;
+
+          var current = _extends({}, localStore.current);
+          // Go through breakpoints and compare with window width
+          Object.keys(localStore.breakpoints).forEach(function (key) {
+            if (width > localStore.breakpoints[key]) {
+              current.name = key;
+              current.value = localStore.breakpoints[key];
+            }
+          });
+          localStore.current = current;
+        };
+      }
+    }();
 
     Vue.mixin({
       beforeCreate: function beforeCreate() {
-        var root = this.$parent;
-
-        if (root) {
-          // TODO: Verify if this line is needed
-          Vue.util.defineReactive(this, '__mq__', root._mq);
-        } else {
-          this._mq = localStore;
-          Vue.util.defineReactive(this, '__mq__', this._mq);
-        }
+        this._mq = localStore;
+        Vue.util.defineReactive(this, '__mq__', this._mq);
+        resizeListener();
       },
       mounted: function mounted() {
-        if (!this.$mq.listeningForResize) {
-          this.$mq.listeningForResize = true;
+        if (!this.$mq.listening) {
+          this.$mq.listening = true;
           window.addEventListener('resize', resizeListener);
-          updateBreakpoint();
         }
       },
 
       methods: {
-        // TODO: evaluate if we can use matchMedia API
-        // https://developer.mozilla.org/en/docs/Web/API/Window/matchMedia
         $query: function $query(options) {
           if (options.from === undefined && options.to === undefined) {
-            throw new Error('No values for "to" or "from" received');
+            console.error('No values for "to" or "from" received');
           }
 
           if (options.to !== undefined && options.from !== undefined) {
@@ -113,22 +131,22 @@ var MediaQueries = exports.MediaQueries = {
 
             // "from" cannot be larger than "to"
             if (breakpointFrom > breakpointTo) {
-              throw new Error('Breakpoint ' + breakpointFrom + ' is larger than ' + breakpointTo + '');
+              console.error('Breakpoint ' + breakpointFrom + ' is larger than ' + breakpointTo + '');
             }
 
             // The breakpoint needs to be smaller than the "to" (exclusive)
             // but larger or the same as "from" (inclusive)
-            return breakpointFrom <= this.$mq.current.value && this.$mq.current.value < breakpointTo;
+            return breakpointFrom <= this.$mq.currentBreakpoint.value && this.$mq.currentBreakpoint.value < breakpointTo;
           }
 
           if (options.to !== undefined) {
             // Breakpoint needs to smaller than the "to" (exclusive)
-            return this.$mq.current.value < getBreakpointValue(options.to);
+            return this.$mq.currentBreakpoint.value < getBreakpointValue(options.to);
           }
 
           if (options.from !== undefined) {
             // Breakpoint needs larger or the same as "from" (inclusive)
-            return this.$mq.current.value >= getBreakpointValue(options.from);
+            return this.$mq.currentBreakpoint.value >= getBreakpointValue(options.from);
           }
         }
       }
