@@ -1,6 +1,9 @@
 import debounce from 'lodash.debounce'
 
 /**
+ * MediaQueries v1.0.4
+ * License: WTFPL
+ *
  * This is a media queries plugin for vue that adds a `$query` method to every
  * component and exposes media query information through the `$mq` property.
  *
@@ -24,10 +27,10 @@ export const MediaQueries = {
     })
 
     const localStore = {
-      listeningForResize: false,
+      listening: false,
       width: false,
       breakpoints: options.breakpoints,
-      current: {
+      currentBreakpoint: {
         value: 0,
         name: 'zero'
       }
@@ -35,8 +38,7 @@ export const MediaQueries = {
 
     const resizeListener = debounce(function () {
       updateBreakpoint()
-    }, options.debounceDelay)
-
+    }, options.debounceDelay, { leading: true, trailing: true })
     const getBreakpointValue = function (breakpoint) {
       if (localStore.breakpoints[breakpoint] === undefined) {
         console.error('Breakpoint not found: "' + breakpoint + '"')
@@ -85,26 +87,17 @@ export const MediaQueries = {
 
     Vue.mixin({
       beforeCreate () {
-        const root = this.$parent
-
-        if (root) {
-          // TODO: Verify if this line is needed
-          Vue.util.defineReactive(this, '__mq__', root._mq)
-        } else {
-          this._mq = localStore
-          Vue.util.defineReactive(this, '__mq__', this._mq)
-        }
+        this._mq = localStore
+        Vue.util.defineReactive(this, '__mq__', this._mq)
+        resizeListener()
       },
       mounted () {
-        if (!this.$mq.listeningForResize) {
-          this.$mq.listeningForResize = true
+        if (!this.$mq.listening) {
+          this.$mq.listening = true
           window.addEventListener('resize', resizeListener)
-          updateBreakpoint()
         }
       },
       methods: {
-        // TODO: evaluate if we can use matchMedia API
-        // https://developer.mozilla.org/en/docs/Web/API/Window/matchMedia
         $query: function (options) {
           if (options.from === undefined && options.to === undefined) {
             console.error('No values for "to" or "from" received')
@@ -121,17 +114,17 @@ export const MediaQueries = {
 
             // The breakpoint needs to be smaller than the "to" (exclusive)
             // but larger or the same as "from" (inclusive)
-            return breakpointFrom <= this.$mq.current.value && this.$mq.current.value < breakpointTo
+            return breakpointFrom <= this.$mq.currentBreakpoint.value && this.$mq.currentBreakpoint.value < breakpointTo
           }
 
           if (options.to !== undefined) {
             // Breakpoint needs to smaller than the "to" (exclusive)
-            return this.$mq.current.value < getBreakpointValue(options.to)
+            return this.$mq.currentBreakpoint.value < getBreakpointValue(options.to)
           }
 
           if (options.from !== undefined) {
             // Breakpoint needs larger or the same as "from" (inclusive)
-            return this.$mq.current.value >= getBreakpointValue(options.from)
+            return this.$mq.currentBreakpoint.value >= getBreakpointValue(options.from)
           }
         }
       }
