@@ -9,7 +9,9 @@ Vue.js 2.0+ plugin for media queries.
 
 ## Installation
 
-(TODO)
+```bash
+yarn add github.com/wearelucid/vue-mq#1.0.0
+```
 
 ## Integration
 
