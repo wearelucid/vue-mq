@@ -10,10 +10,9 @@ import debounce from 'lodash.debounce'
 
 export const MediaQueries = {
   install (Vue, opt = {}) {
-    const options = {
-      debounceDelay: 100,
-      ...opt
-    }
+    const options = Object.assign({}, {
+      debounceDelay: 100
+    }, opt)
 
     if (typeof options.breakpoints !== 'object') { // TODO lodash.isobject
       throw new Error('No valid breakpoints object received')
