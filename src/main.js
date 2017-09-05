@@ -16,7 +16,7 @@ export const MediaQueries = {
     }
 
     if (typeof options.breakpoints !== 'object') { // TODO lodash.isobject
-      throw new Error('No valid breakpoints object received')
+      console.error('No valid breakpoints object received')
     }
 
     Object.defineProperty(Vue.prototype, '$mq', {
@@ -39,24 +39,49 @@ export const MediaQueries = {
 
     const getBreakpointValue = function (breakpoint) {
       if (localStore.breakpoints[breakpoint] === undefined) {
-        throw new Error('Breakpoint not found: "' + breakpoint + '"')
+        console.error('Breakpoint not found: "' + breakpoint + '"')
       }
 
       return parseInt(localStore.breakpoints[breakpoint], 10)
     }
 
-    const updateBreakpoint = function () {
-      const { width } = getViewportSize()
-      const current = { ...localStore.current }
-      // Go through breakpoints and compare with window width
-      Object.keys(localStore.breakpoints).forEach((key) => {
-        if (width > localStore.breakpoints[key]) {
-          current.name = key
-          current.value = localStore.breakpoints[key]
+    /**
+     * Function returns different function depending
+     * on if matchMedia is supported or not.
+     */
+    const updateBreakpoint = (function () {
+      // Check if matchMedia is supported
+      const supportsMatchMedia = window.matchMedia || window.msMatchMedia
+
+      if (supportsMatchMedia) {
+        // Modern Browers
+        return function () {
+          const currentBreakpoint = { ...localStore.currentBreakpoint }
+          // Go through breakpoints and compare with window width
+          Object.keys(localStore.breakpoints).forEach((key) => {
+            if (window.matchMedia('(min-width: ' + localStore.breakpoints[key] + 'px)').matches) {
+              currentBreakpoint.name = key
+              currentBreakpoint.value = localStore.breakpoints[key]
+            }
+          })
+          localStore.currentBreakpoint = currentBreakpoint
         }
-      })
-      localStore.current = current
-    }
+      } else {
+        // support e.g. IE9/IE8
+        return function () {
+          const { width } = getViewportSize()
+          const current = { ...localStore.current }
+          // Go through breakpoints and compare with window width
+          Object.keys(localStore.breakpoints).forEach((key) => {
+            if (width > localStore.breakpoints[key]) {
+              current.name = key
+              current.value = localStore.breakpoints[key]
+            }
+          })
+          localStore.current = current
+        }
+      }
+    }())
 
     Vue.mixin({
       beforeCreate () {
@@ -82,7 +107,7 @@ export const MediaQueries = {
         // https://developer.mozilla.org/en/docs/Web/API/Window/matchMedia
         $query: function (options) {
           if (options.from === undefined && options.to === undefined) {
-            throw new Error('No values for "to" or "from" received')
+            console.error('No values for "to" or "from" received')
           }
 
           if (options.to !== undefined && options.from !== undefined) {
@@ -91,7 +116,7 @@ export const MediaQueries = {
 
             // "from" cannot be larger than "to"
             if (breakpointFrom > breakpointTo) {
-              throw new Error('Breakpoint ' + breakpointFrom + ' is larger than ' + breakpointTo + '')
+              console.error('Breakpoint ' + breakpointFrom + ' is larger than ' + breakpointTo + '')
             }
 
             // The breakpoint needs to be smaller than the "to" (exclusive)

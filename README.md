@@ -69,17 +69,15 @@ Vue.component({
 ```
 
 ## Todos
-- [ ] Consider removing `throw` in production
 - [ ] Validate reactive property. Is this correctly implemented? (_mq, __mq__, $mq)
-- [ ] Documentation: Example
 - [ ] Option to sync with CSS (e.g by reading breakpoints from JSON String, which we set <title>'s font-size property)
 - [ ] Implement alternative way to pass in breakpoints
 - [ ] Tests
 - [ ] Npm Compat
-- [ ] Consider using [matchMedia](https://developer.mozilla.org/en/docs/Web/API/Window/matchMedia) which is [polyfillable](https://github.com/paulirish/matchMedia.js)
 
 ## Browser Support
-IE9+ ([See clientWidth](https://tylercipriani.com/blog/2014/07/12/crossbrowser-javascript-scrollbar-detection/))
+IE8+ ([See clientWidth](https://tylercipriani.com/blog/2014/07/12/crossbrowser-javascript-scrollbar-detection/))
+Uses [matchMedia](https://developer.mozilla.org/en/docs/Web/API/Window/matchMedia) for newer browsers but has a polyfill for IE8/IE9.
 
 ## License
 [MIT](LICENSE)

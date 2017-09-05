@@ -1,6 +1,6 @@
 {
   "name": "vue-mq",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "inline screensize/mediaquery check for any vue application 📱",
   "main": "src/main.js",
   "repository": "https://github.com/wearelucid/vue-mq.git",
