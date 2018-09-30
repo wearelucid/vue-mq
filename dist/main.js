@@ -1,19 +1,19 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.MediaQueries = undefined;
+exports.MediaQueries = void 0;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _lodash = require('lodash.debounce');
-
-var _lodash2 = _interopRequireDefault(_lodash);
+var _lodash = _interopRequireDefault(require("lodash.debounce"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 /**
  * MediaQueries v1.0.5
@@ -25,12 +25,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * It assumes an option `breakpoints` with breakpoint names as keys
  * and the width in pixels as number.
  */
-
-var MediaQueries = exports.MediaQueries = {
+var MediaQueries = {
   install: function install(Vue) {
     var opt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-    var options = _extends({
+    var options = _objectSpread({
       debounceDelay: 100
     }, opt);
 
@@ -44,7 +43,6 @@ var MediaQueries = exports.MediaQueries = {
         return this.$root.__mq__;
       }
     });
-
     var localStore = {
       listening: false,
       width: false,
@@ -54,10 +52,13 @@ var MediaQueries = exports.MediaQueries = {
         name: 'zero'
       }
     };
-
-    var resizeListener = (0, _lodash2.default)(function () {
+    var resizeListener = (0, _lodash.default)(function () {
       updateBreakpoint();
-    }, options.debounceDelay, { leading: true, trailing: true });
+    }, options.debounceDelay, {
+      leading: true,
+      trailing: true
+    });
+
     var getBreakpointValue = function getBreakpointValue(breakpoint) {
       if (localStore.breakpoints[breakpoint] === undefined) {
         console.error('Breakpoint not found: "' + breakpoint + '"');
@@ -65,11 +66,12 @@ var MediaQueries = exports.MediaQueries = {
 
       return parseInt(localStore.breakpoints[breakpoint], 10);
     };
-
     /**
      * Function returns different function depending
      * on if matchMedia is supported or not.
      */
+
+
     var updateBreakpoint = function () {
       // Check if matchMedia is supported
       var supportsMatchMedia = window.matchMedia || window.msMatchMedia;
@@ -77,8 +79,9 @@ var MediaQueries = exports.MediaQueries = {
       if (supportsMatchMedia) {
         // Modern Browers
         return function () {
-          var currentBreakpoint = _extends({}, localStore.currentBreakpoint);
-          // Go through breakpoints and compare with window width
+          var currentBreakpoint = _objectSpread({}, localStore.currentBreakpoint); // Go through breakpoints and compare with window width
+
+
           Object.keys(localStore.breakpoints).forEach(function (key) {
             if (window.matchMedia('(min-width: ' + localStore.breakpoints[key] + 'px)').matches) {
               currentBreakpoint.name = key;
@@ -93,8 +96,9 @@ var MediaQueries = exports.MediaQueries = {
           var _getViewportSize = getViewportSize(),
               width = _getViewportSize.width;
 
-          var current = _extends({}, localStore.current);
-          // Go through breakpoints and compare with window width
+          var current = _objectSpread({}, localStore.current); // Go through breakpoints and compare with window width
+
+
           Object.keys(localStore.breakpoints).forEach(function (key) {
             if (width > localStore.breakpoints[key]) {
               current.name = key;
@@ -118,7 +122,6 @@ var MediaQueries = exports.MediaQueries = {
           window.addEventListener('resize', resizeListener);
         }
       },
-
       methods: {
         $query: function $query(options) {
           if (options.from === undefined && options.to === undefined) {
@@ -127,15 +130,14 @@ var MediaQueries = exports.MediaQueries = {
 
           if (options.to !== undefined && options.from !== undefined) {
             var breakpointFrom = getBreakpointValue(options.from);
-            var breakpointTo = getBreakpointValue(options.to);
+            var breakpointTo = getBreakpointValue(options.to); // "from" cannot be larger than "to"
 
-            // "from" cannot be larger than "to"
             if (breakpointFrom > breakpointTo) {
               console.error('Breakpoint ' + breakpointFrom + ' is larger than ' + breakpointTo + '');
-            }
-
-            // The breakpoint needs to be smaller than the "to" (exclusive)
+            } // The breakpoint needs to be smaller than the "to" (exclusive)
             // but larger or the same as "from" (inclusive)
+
+
             return breakpointFrom <= this.$mq.currentBreakpoint.value && this.$mq.currentBreakpoint.value < breakpointTo;
           }
 
@@ -151,14 +153,18 @@ var MediaQueries = exports.MediaQueries = {
         }
       }
     });
-
     /*
      * Use document.documentElement.clientWidth or document.body.clientWidth
      * Works in IE8 and leaves away scrollbar
      */
+
     function getViewportSize() {
       var e = document.documentElement || document.body;
-      return { width: e['clientWidth'], height: e['clientHeight'] };
+      return {
+        width: e['clientWidth'],
+        height: e['clientHeight']
+      };
     }
   }
 };
+exports.MediaQueries = MediaQueries;

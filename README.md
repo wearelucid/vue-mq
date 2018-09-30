@@ -1,4 +1,6 @@
 # vue-mq
+
+[![npm version](https://img.shields.io/npm/v/@wearelucid/vue-mq.svg?style=flat-square)](https://www.npmjs.com/package/@wearelucid/vue-mq)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![license](https://img.shields.io/badge/license-MIT-red.svg)](https://choosealicense.com/licenses/mit/)
 
 
@@ -10,7 +12,7 @@ Vue.js 2.0+ plugin for media queries.
 ## Installation
 
 ```bash
-yarn add github.com/wearelucid/vue-mq#1.0.0
+yarn add @wearelucid/vue-mq
 ```
 
 ## Integration

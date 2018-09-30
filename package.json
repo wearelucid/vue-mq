@@ -1,20 +1,21 @@
 {
-  "name": "vue-mq",
-  "version": "1.0.5",
-  "description": "inline screensize/mediaquery check for any vue application 📱",
+  "name": "@wearelucid/vue-mq",
+  "version": "1.1.0",
+  "description": "Inline screensize/mediaquery check for any vue application 📱",
   "main": "dist/main.js",
   "repository": "https://github.com/wearelucid/vue-mq.git",
   "author": "Lucid <buero@wearelucid.ch>",
   "license": "MIT",
   "dependencies": {
+    "@babel/core": "^7.1.0",
     "lodash.debounce": "^4.0.8"
   },
   "devDependencies": {
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-es2015": "6",
-    "babel-preset-stage-2": "^6.24.1"
+    "@babel/cli": "^7.1.0",
+    "@babel/plugin-transform-spread": "^7.0.0",
+    "@babel/preset-env": "^7.1.0"
   },
   "scripts": {
-    "build": "babel src --presets=babel-preset-es2015 --plugins=babel-plugin-transform-object-rest-spread --out-dir dist"
+    "build": "babel src --out-dir dist"
   }
 }
